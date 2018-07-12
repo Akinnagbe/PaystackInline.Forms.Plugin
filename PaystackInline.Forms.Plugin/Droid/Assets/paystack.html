@@ -1,0 +1,23 @@
+﻿<html>
+<body>
+    <form>
+        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="https://js.paystack.co/v1/inline.js"></script>
+    </form>
+
+    <script>
+       
+        function payWithPaystack(jobj) {
+            jobj.callback= function(resp) {
+                invokeCSharpAction(resp.reference);
+            }
+            jobj.onClose = function () {
+                invokeCSharpCloseAction();
+            }
+           
+            var handler = PaystackPop.setup(jobj);
+            handler.openIframe();
+        }
+    </script>
+</body>
+</html>
