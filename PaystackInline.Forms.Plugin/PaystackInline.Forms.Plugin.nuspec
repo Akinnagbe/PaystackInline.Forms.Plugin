@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Xam.Plugin.PaystackInline</id>
-    <version>1.0.0-alpha17</version>
+    <version>1.0.0-alpha18</version>
     <title>Paystack Inline Payment for Xamarin and Windows</title>
     <authors>Akinnagbe Olamide James</authors>
     <owners>Akinnagbe Olamide James</owners>

@@ -17,7 +17,8 @@ namespace Plugin.PaystackInline.Forms.Plugin.iOS
 {
    public class PaystackWebViewRenderer : ViewRenderer<PaystackWebView, WKWebView>, IWKScriptMessageHandler
     {
-        const string JavaScriptFunction = "function invokeCSharpAction(data){window.webkit.messageHandlers.invokeAction.postMessage(data);}";
+        const string PaymentJavaScriptFunction = "function invokePaymentAction(data){window.webkit.messageHandlers.invokePayAction.postMessage(data);}";
+        const string ClosePaymentJavaScriptFunction = "function invokeClosePaymentAction(data){window.webkit.messageHandlers.invokeCloseAction.postMessage(data);}";
         WKUserContentController userController;
 
         protected override void OnElementChanged(ElementChangedEventArgs<HybridWebView> e)
@@ -26,10 +27,16 @@ namespace Plugin.PaystackInline.Forms.Plugin.iOS
 
             if (Control == null)
             {
+                var webviewElement = (HybridWebView)Element;
                 userController = new WKUserContentController();
-                var script = new WKUserScript(new NSString(JavaScriptFunction), WKUserScriptInjectionTime.AtDocumentEnd, false);
-                userController.AddUserScript(script);
-                userController.AddScriptMessageHandler(this, "invokeAction");
+                var paymentscript = new WKUserScript(new NSString(PaymentJavaScriptFunction), WKUserScriptInjectionTime.AtDocumentEnd, false);
+                var closeScript = new WKUserScript(new NSString(ClosePaymentJavaScriptFunction), WKUserScriptInjectionTime.AtDocumentEnd, false);
+                var paystackScript = new WKUserScript(new NSString($"payWithPaystack({webviewElement.Data})"), WKUserScriptInjectionTime.AtDocumentEnd, false);
+                userController.AddUserScript(paymentscript);
+                userController.AddUserScript(closeScript);
+                userController.AddUserScript(paystackScript);
+                userController.AddScriptMessageHandler(this, "invokePayAction");
+                userController.AddScriptMessageHandler(this, "invokeCloseAction");
 
                 var config = new WKWebViewConfiguration { UserContentController = userController };
                 var webView = new WKWebView(Frame, config);
@@ -38,7 +45,8 @@ namespace Plugin.PaystackInline.Forms.Plugin.iOS
             if (e.OldElement != null)
             {
                 userController.RemoveAllUserScripts();
-                userController.RemoveScriptMessageHandler("invokeAction");
+                userController.RemoveScriptMessageHandler("invokePayAction");
+                userController.RemoveScriptMessageHandler("invokeCloseAction");
                 var hybridWebView = e.OldElement as HybridWebView;
                 hybridWebView.CleanUp();
             }
@@ -51,7 +59,16 @@ namespace Plugin.PaystackInline.Forms.Plugin.iOS
 
         public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
         {
-            Element.InvokeCallbackAction(message.Body.ToString());
+            if (message.Name == "invokePayAction")
+            {
+                Element.InvokeCallbackAction(message.Body.ToString());
+            }
+            if (message.Name == "invokeCloseAction")
+            {
+                Element.InvokeCloseAction();
+            }
+
         }
+
     }
 }

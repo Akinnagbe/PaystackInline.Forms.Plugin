@@ -100,10 +100,6 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Droid\Assets\HtmlContent\" />
-  </ItemGroup>
-
   <!--Additional item groups-->
   <!--
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.TVOS')) ">
