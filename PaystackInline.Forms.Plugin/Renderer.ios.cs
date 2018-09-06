@@ -52,7 +52,8 @@ namespace Plugin.PaystackInline.Forms.Plugin.iOS
             }
             if (e.NewElement != null)
             {
-                string fileName = Path.Combine(NSBundle.MainBundle.BundlePath, string.Format("Content/{0}", Element.Uri));
+              //  string fileName = Path.Combine(NSBundle.MainBundle.BundlePath, string.Format("Content/{0}", Element.Uri));
+                string fileName = Path.Combine(NSBundle.MainBundle.BundlePath, "paystack.html");
                 Control.LoadRequest(new NSUrlRequest(new NSUrl(fileName, false)));
             }
         }

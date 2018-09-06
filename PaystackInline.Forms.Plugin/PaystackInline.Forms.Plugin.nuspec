@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package >
-  <metadata>
+  <metadata minClientVersion="3.3">
     <id>Xam.Plugin.PaystackInline</id>
-    <version>1.0.0-alpha18</version>
+    <version>1.0.0-alpha36</version>
     <title>Paystack Inline Payment for Xamarin and Windows</title>
     <authors>Akinnagbe Olamide James</authors>
     <owners>Akinnagbe Olamide James</owners>
@@ -20,16 +20,33 @@
     </dependencies>
     
   </metadata>
+
+ 
   
   <files>
     <!-- Cross-platform reference assemblies -->
-    <file src="bin\Release\netstandard2.0\Plugin.PaystackInline.Forms.Plugin.dll" target="lib\netstandard2.0\Plugin.PaystackInline.Forms.Plugin.dll" />
-    <file src="bin\Release\netstandard2.0\Plugin.PaystackInline.Forms.Plugin.xml" target="lib\netstandard2.0\Plugin.PaystackInline.Forms.Plugin.xml" />
-      
+    <!--netstandard1.0-->
+    <file src="bin\Release\netstandard1.0\Plugin.PaystackInline.Forms.Plugin.dll" target="lib\netstandard1.0" />
+    <file src="bin\Release\netstandard1.0\Plugin.PaystackInline.Forms.Plugin.*pdb" target="lib\netstandard1.0" />
+   
+    <!--netstandard2.0-->
+    <file src="bin\Release\netstandard2.0\Plugin.PaystackInline.Forms.Plugin.dll" target="lib\netstandard2.0" />
+    <file src="bin\Release\netstandard2.0\Plugin.PaystackInline.Forms.Plugin.*pdb" target="lib\netstandard2.0" />
+
     <!-- Android reference assemblies -->
-    <file src="bin\Release\monoandroid80\Plugin.PaystackInline.Forms.Plugin.dll" target="lib\MonoAndroid80\Plugin.PaystackInline.Forms.Plugin.dll" />
-    <file src="bin\Release\monoandroid80\Plugin.PaystackInline.Forms.Plugin.xml" target="lib\MonoAndroid80\Plugin.PaystackInline.Forms.Plugin.xml" />
-    <file src="Droid\Assets\paystack.html" target="content\monoandroid80\Assets\paystack.html" />
+    <file src="bin\Release\monoandroid80\MonoAndroid80\Plugin.PaystackInline.Forms.Plugin.dll" target="lib\MonoAndroid80" />
+    <file src="bin\Release\monoandroid80\MonoAndroid80\Plugin.PaystackInline.Forms.Plugin.*pdb" target="lib\MonoAndroid80" />
+    <!--<file src="bin\Release\MonoAndroid10\Plugin.PaystackInline.Forms.Plugin.dll" target="lib\MonoAndroid10" />
+    <file src="bin\Release\MonoAndroid10\Plugin.PaystackInline.Forms.Plugin.*pdb" target="lib\MonoAndroid10" />-->
+
+    <!--iPhone Unified-->
+    <file src="bin\Release\xamarin.ios10\Plugin.PaystackInline.Forms.Plugin.dll" target="lib\Xamarin.iOS10" />
+    <file src="bin\Release\xamarin.ios10\Plugin.PaystackInline.Forms.Plugin.*pdb" target="lib\Xamarin.iOS10" />
+ 
+
+
+    <!--<file src="Droid\Assets\paystack.html" target="content\monoandroid80\Assets\paystack.html" />
+    <file src="Droid\Assets\paystack.html" target="content\monoandroid81\Assets\paystack.html" />-->
 
   </files>
 </package>

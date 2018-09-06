@@ -6,7 +6,6 @@ using Java.Interop;
 using Plugin.PaystackInline.Forms.Plugin;
 using Plugin.PaystackInline.Forms.Plugin.Droid;
 using System;
-using System.Collections.Generic;
 using System.Text;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
@@ -17,10 +16,10 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
     [Preserve(AllMembers = true)]
     public class PaystackWebViewRenderer : ViewRenderer<PaystackWebView, Android.Webkit.WebView>
     {
-        const string CallBackJavaScriptFunction = "function invokeCSharpAction(data){jsBridge.invokeCallbackAction(data);}";
-        const string CloseJavaScriptFunction = "function invokeCSharpCloseAction(){jsBridge.invokeCloseAction();}";
+        private const string CallBackJavaScriptFunction = "function invokeCSharpAction(data){jsBridge.invokeCallbackAction(data);}";
+        private const string CloseJavaScriptFunction = "function invokeCSharpCloseAction(){jsBridge.invokeCloseAction();}";
+        private Context _context;
 
-        Context _context;
         public PaystackWebViewRenderer(Context context) : base(context)
         {
             _context = context;
@@ -32,7 +31,7 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
             {
                 var webview = new Android.Webkit.WebView(_context);
                 webview.Settings.JavaScriptEnabled = true;
-                this.SetNativeControl(webview);
+                SetNativeControl(webview);
             }
             if (e.OldElement != null)
             {
@@ -44,17 +43,20 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
             if (e.NewElement != null)
             {
                 //subscribe to Events
-                var webviewElement = (PaystackWebView)Element;
-                Control.AddJavascriptInterface(new JSBridge(this), "jsBridge");
+                var webviewElement = Element;
+                Control.AddJavascriptInterface(new JSBridge(this, _context), "jsBridge");
+                string content = LoadHtmlString();
                 Control.SetWebViewClient(new CustomWebViewClient(webviewElement.Data));
-                
-                Control.LoadUrl(string.Format("file:///android_asset/Content/{0}", Element.Uri));
+                // Control.LoadUrl("file:///android_asset/paystack.html");
+
+
+                Control.LoadDataWithBaseURL("", content, "text/html", "UTF-8", null);
                 InjectJS(CallBackJavaScriptFunction);
                 InjectJS(CloseJavaScriptFunction);
             }
         }
 
-        void InjectJS(string script)
+        private void InjectJS(string script)
         {
             if (Control != null)
             {
@@ -62,11 +64,57 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
             }
         }
 
+        internal string LoadHtmlString()
+        {
+            var html = new StringBuilder();
+            html.Append("<html>");
+            html.AppendLine();
+            html.Append("<body>");
+            html.AppendLine();
+            html.Append("<form>");
+            html.AppendLine();
+            html.Append("<script src=\"http://code.jquery.com/jquery-2.1.4.min.js\"></script>");
+            html.AppendLine();
+            html.Append("<script src=\"https://js.paystack.co/v1/inline.js\"></script>");
+            html.AppendLine();
+            html.Append("</form>");
+            html.AppendLine();
+            html.Append("<script>");
+            html.AppendLine();
+            html.Append("function payWithPaystack(jobj) {");
+            html.AppendLine();
+            html.Append(" jobj.callback= function(resp) {");
+            html.AppendLine();
+            html.Append("invokeCSharpAction(resp.reference);");
+            html.AppendLine();
+            html.Append("}");
+            html.AppendLine();
+            html.Append("jobj.onClose = function () {");
+            html.AppendLine();
+            html.Append("invokeCSharpCloseAction();");
+            html.AppendLine();
+            html.Append("}");
+            html.AppendLine();
+            html.Append(" var handler = PaystackPop.setup(jobj);");
+            html.AppendLine();
+            html.Append("handler.openIframe();");
+            html.AppendLine();
+            html.Append(" }");
+            html.AppendLine();
+            html.Append("</script>");
+            html.AppendLine();
+            html.Append("</body>");
+            html.AppendLine();
+            html.Append("</html>");
+
+
+            return html.ToString();
+        }
     }
 
-    class CustomWebViewClient : WebViewClient
+    internal class CustomWebViewClient : WebViewClient
     {
-        string Record = "";
+        private string Record = "";
         public CustomWebViewClient(string record)
         {
             Record = record;
@@ -81,15 +129,30 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
         {
             base.OnPageStarted(view, url, favicon);
         }
+        public override void OnReceivedError(Android.Webkit.WebView view, IWebResourceRequest request, WebResourceError error)
+        {
+            base.OnReceivedError(view, request, error);
+        }
+
+        public override void OnReceivedError(Android.Webkit.WebView view, [GeneratedEnum] ClientError errorCode, string description, string failingUrl)
+        {
+            base.OnReceivedError(view, errorCode, description, failingUrl);
+        }
+
+        public override void OnReceivedHttpError(Android.Webkit.WebView view, IWebResourceRequest request, WebResourceResponse errorResponse)
+        {
+            base.OnReceivedHttpError(view, request, errorResponse);
+        }
     }
 
-     class JSBridge : Java.Lang.Object
+    internal class JSBridge : Java.Lang.Object
     {
-        readonly WeakReference<PaystackWebViewRenderer> hybridWebViewRenderer;
-
-        public JSBridge(PaystackWebViewRenderer hybridRenderer)
+        private readonly WeakReference<PaystackWebViewRenderer> hybridWebViewRenderer;
+        private Context _context;
+        public JSBridge(PaystackWebViewRenderer hybridRenderer, Context context)
         {
             hybridWebViewRenderer = new WeakReference<PaystackWebViewRenderer>(hybridRenderer);
+            _context = context;
         }
 
         [JavascriptInterface]

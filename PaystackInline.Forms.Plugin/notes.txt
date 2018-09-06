@@ -1,0 +1,2 @@
+nuget package
+C:\me\PaystackXamPlugin\PaystackInline.Forms.Plugin>nuget pack C:\me\PaystackXamPlugin\PaystackInline.Forms.Plugin\PaystackInline.Forms.Plugin.nuspec
