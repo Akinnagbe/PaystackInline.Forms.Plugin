@@ -15,19 +15,21 @@ using Xamarin.Forms.Platform.iOS;
 [assembly: ExportRenderer(typeof(PaystackWebView), typeof(PaystackWebViewRenderer))]
 namespace Plugin.PaystackInline.Forms.Plugin.iOS
 {
-   public class PaystackWebViewRenderer : ViewRenderer<PaystackWebView, WKWebView>, IWKScriptMessageHandler
+    [Preserve(AllMembers = true)]
+    public class PaystackWebViewRenderer : ViewRenderer<PaystackWebView, WKWebView>, IWKScriptMessageHandler
     {
-        const string PaymentJavaScriptFunction = "function invokePaymentAction(data){window.webkit.messageHandlers.invokePayAction.postMessage(data);}";
-        const string ClosePaymentJavaScriptFunction = "function invokeClosePaymentAction(data){window.webkit.messageHandlers.invokeCloseAction.postMessage(data);}";
+        const string PaymentJavaScriptFunction = "function invokeCSharpAction(data){window.webkit.messageHandlers.invokePayAction.postMessage(data);}";
+        const string ClosePaymentJavaScriptFunction = "function invokeCSharpCloseAction(data){window.webkit.messageHandlers.invokeCloseAction.postMessage(data);}";
+
         WKUserContentController userController;
 
-        protected override void OnElementChanged(ElementChangedEventArgs<HybridWebView> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<PaystackWebView> e)
         {
             base.OnElementChanged(e);
 
             if (Control == null)
             {
-                var webviewElement = (HybridWebView)Element;
+                var webviewElement = (PaystackWebView)Element;
                 userController = new WKUserContentController();
                 var paymentscript = new WKUserScript(new NSString(PaymentJavaScriptFunction), WKUserScriptInjectionTime.AtDocumentEnd, false);
                 var closeScript = new WKUserScript(new NSString(ClosePaymentJavaScriptFunction), WKUserScriptInjectionTime.AtDocumentEnd, false);
@@ -47,14 +49,15 @@ namespace Plugin.PaystackInline.Forms.Plugin.iOS
                 userController.RemoveAllUserScripts();
                 userController.RemoveScriptMessageHandler("invokePayAction");
                 userController.RemoveScriptMessageHandler("invokeCloseAction");
-                var hybridWebView = e.OldElement as HybridWebView;
-                hybridWebView.CleanUp();
+                var paystackWebView = e.OldElement as PaystackWebView;
+                paystackWebView.CleanUp();
             }
             if (e.NewElement != null)
             {
-              //  string fileName = Path.Combine(NSBundle.MainBundle.BundlePath, string.Format("Content/{0}", Element.Uri));
-                string fileName = Path.Combine(NSBundle.MainBundle.BundlePath, "paystack.html");
-                Control.LoadRequest(new NSUrlRequest(new NSUrl(fileName, false)));
+              //  string content = LoadHtmlString();
+              //  Control.LoadHtmlString(content, baseUrl: null);
+                 string fileName = Path.Combine(NSBundle.MainBundle.BundlePath, "Content/paystack.html");
+                 Control.LoadRequest(new NSUrlRequest(new NSUrl(fileName, false)));
             }
         }
 
@@ -69,6 +72,53 @@ namespace Plugin.PaystackInline.Forms.Plugin.iOS
                 Element.InvokeCloseAction();
             }
 
+        }
+
+        internal string LoadHtmlString()
+        {
+            var html = new StringBuilder();
+            html.Append("<html>");
+            html.AppendLine();
+            html.Append("<body>");
+            html.AppendLine();
+            html.Append("<form>");
+            html.AppendLine();
+            html.Append("<script src=\"http://code.jquery.com/jquery-2.1.4.min.js\"></script>");
+            html.AppendLine();
+            html.Append("<script src=\"https://js.paystack.co/v1/inline.js\"></script>");
+            html.AppendLine();
+            html.Append("</form>");
+            html.AppendLine();
+            html.Append("<script>");
+            html.AppendLine();
+            html.Append("function payWithPaystack(jobj) {");
+            html.AppendLine();
+            html.Append(" jobj.callback= function(resp) {");
+            html.AppendLine();
+            html.Append("invokeCSharpAction(resp.reference);");
+            html.AppendLine();
+            html.Append("}");
+            html.AppendLine();
+            html.Append("jobj.onClose = function () {");
+            html.AppendLine();
+            html.Append("invokeCSharpCloseAction('');");
+            html.AppendLine();
+            html.Append("}");
+            html.AppendLine();
+            html.Append(" var handler = PaystackPop.setup(jobj);");
+            html.AppendLine();
+            html.Append("handler.openIframe();");
+            html.AppendLine();
+            html.Append(" }");
+            html.AppendLine();
+            html.Append("</script>");
+            html.AppendLine();
+            html.Append("</body>");
+            html.AppendLine();
+            html.Append("</html>");
+
+
+            return html.ToString();
         }
 
     }
