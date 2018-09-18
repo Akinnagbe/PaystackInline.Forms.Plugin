@@ -20,7 +20,7 @@ namespace SampleApp
             dynamic displayname = new JObject();
             displayname.display_name = "Mobile Number";
             displayname.variable_name = "mobile_number";
-            displayname.@value = "+2348038541905";
+            displayname.@value = "+23480000000";
 
             customFieldsArray.Add(displayname);
             dynamic jobtitlefield = new JObject();
@@ -36,10 +36,10 @@ namespace SampleApp
             custom.custom_fields = customFieldsArray;
 
             dynamic product = new JObject();
-            product.key = "pk_test_eb19f9d000457612f2ded14cfb0cb223e56f1d11";
-            product.email = "olamidejames007@gmail.com";
+            product.key = "pk_test_aaaaaaaaaaaaaaaaa";
+            product.email = "me@you.com";
             product.amount = 490000m;
-            product.subaccount = "ACCT_xopi2ghxe20jmv1";
+            product.subaccount = "ACCT_jiOpeieli";
             product.bearer = "subaccount";
             product.@ref = Guid.NewGuid();
             product.metadata = custom;

@@ -83,7 +83,10 @@
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
     <Compile Include="**\*.apple.cs" />
   </ItemGroup>
-
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
+    <Compile Include="**\*.ios.cs" />
+  </ItemGroup>
+  
   <ItemGroup>
     <None Remove="Paystack.shared.cs" />
   </ItemGroup>
@@ -91,6 +94,9 @@
   <ItemGroup>
     <Reference Include="Mono.Android.Export">
       <HintPath>lib\Mono.Android.Export.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.iOS">
+      <HintPath>..\..\..\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\ReferenceAssemblies\Microsoft\Framework\Xamarin.iOS\v1.0\Xamarin.iOS.dll</HintPath>
     </Reference>
   </ItemGroup>
 

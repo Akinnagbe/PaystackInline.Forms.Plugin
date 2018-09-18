@@ -15,7 +15,7 @@ using Xamarin.Forms.Platform.iOS;
 [assembly: ExportRenderer(typeof(PaystackWebView), typeof(PaystackWebViewRenderer))]
 namespace Plugin.PaystackInline.Forms.Plugin.iOS
 {
-    [Preserve(AllMembers = true)]
+   
     public class PaystackWebViewRenderer : ViewRenderer<PaystackWebView, WKWebView>, IWKScriptMessageHandler
     {
         const string PaymentJavaScriptFunction = "function invokeCSharpAction(data){window.webkit.messageHandlers.invokePayAction.postMessage(data);}";
@@ -54,10 +54,9 @@ namespace Plugin.PaystackInline.Forms.Plugin.iOS
             }
             if (e.NewElement != null)
             {
-              //  string content = LoadHtmlString();
-              //  Control.LoadHtmlString(content, baseUrl: null);
-                 string fileName = Path.Combine(NSBundle.MainBundle.BundlePath, "Content/paystack.html");
-                 Control.LoadRequest(new NSUrlRequest(new NSUrl(fileName, false)));
+                string content = LoadHtmlString();
+                Control.LoadHtmlString(content, baseUrl: null);
+
             }
         }
 

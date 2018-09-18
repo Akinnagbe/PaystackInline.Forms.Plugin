@@ -1,2 +1,5 @@
 nuget package
+
+Build in Release Mode with PaystackInline.Forms.Plugin set as the start up project
+
 C:\me\PaystackXamPlugin\PaystackInline.Forms.Plugin>nuget pack C:\me\PaystackXamPlugin\PaystackInline.Forms.Plugin\PaystackInline.Forms.Plugin.nuspec

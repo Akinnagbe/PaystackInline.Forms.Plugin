@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:SampleApp"
+             xmlns:local="clr-namespace:Plugin.PaystackInline.Forms.Plugin;assembly=Plugin.PaystackInline.Forms.Plugin"
              x:Class="SampleApp.MainPage"
-             xmlns:ps="clr-namespace:Plugin.PaystackInline.Forms.Plugin;assembly=Plugin.PaystackInline.Forms.Plugin">
+             >
 
     <StackLayout>
-        <ps:PaystackWebView x:Name="hybridWebView"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"></ps:PaystackWebView>
+        <local:PaystackWebView x:Name="hybridWebView"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"></local:PaystackWebView>
+
+        <!--<local:HybridWebView x:Name="hybridWebView" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"></local:HybridWebView>-->
     </StackLayout>
 
 </ContentPage>
