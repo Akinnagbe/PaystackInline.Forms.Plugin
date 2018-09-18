@@ -13,7 +13,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.iOS", "TestApp\Sa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.UWP", "TestApp\SampleApp\SampleApp.UWP\SampleApp.UWP.csproj", "{4DFE8513-17D7-44D1-9AD3-40F24FF84A26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp", "TestApp\SampleApp\SampleApp\SampleApp.csproj", "{E06AD4A6-B928-409B-8E5E-E66B24B9179A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleApp", "TestApp\SampleApp\SampleApp\SampleApp.csproj", "{E06AD4A6-B928-409B-8E5E-E66B24B9179A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "screenshoots", "screenshoots", "{DC929635-BCB0-42B2-802F-D09DE6F01673}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\Users\akinnagbeeo\Pictures\paystack\paystackandroid\droid 1.png = ..\..\Users\akinnagbeeo\Pictures\paystack\paystackandroid\droid 1.png
+		..\..\Users\akinnagbeeo\Pictures\paystack\paystackandroid\droid 2.png = ..\..\Users\akinnagbeeo\Pictures\paystack\paystackandroid\droid 2.png
+		..\..\Users\akinnagbeeo\Pictures\paystack\paystackandroid\droid 3.png = ..\..\Users\akinnagbeeo\Pictures\paystack\paystackandroid\droid 3.png
+		..\..\Users\akinnagbeeo\Pictures\paystack\paystackandroid\droid 4.png = ..\..\Users\akinnagbeeo\Pictures\paystack\paystackandroid\droid 4.png
+		..\..\Users\akinnagbeeo\Pictures\paystack\ios 1.PNG = ..\..\Users\akinnagbeeo\Pictures\paystack\ios 1.PNG
+		..\..\Users\akinnagbeeo\Pictures\paystack\ios 2.PNG = ..\..\Users\akinnagbeeo\Pictures\paystack\ios 2.PNG
+		..\..\Users\akinnagbeeo\Pictures\paystack\ios 3.PNG = ..\..\Users\akinnagbeeo\Pictures\paystack\ios 3.PNG
+		..\..\Users\akinnagbeeo\Pictures\paystack\ios 4.PNG = ..\..\Users\akinnagbeeo\Pictures\paystack\ios 4.PNG
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
