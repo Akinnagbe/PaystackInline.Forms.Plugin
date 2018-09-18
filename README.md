@@ -1,6 +1,8 @@
 # PaystackInline.Forms.Plugin
 Paystack Inline Payment Plugin for Xamarin Forms and Windows
 
+![ios 1](https://github.com/Akinnagbe/PaystackInline.Forms.Plugin/blob/master/PaystackInline.Forms.Plugin/ScreenShots/ios%201.PNG) ![android 1](https://github.com/Akinnagbe/PaystackInline.Forms.Plugin/blob/master/PaystackInline.Forms.Plugin/ScreenShots/droid%201.png)
+
 ## NuGet
 [Xam.Plugin.PaystackInline](https://www.nuget.org/packages/Xam.Plugin.PaystackInline/)
 
