@@ -7,6 +7,12 @@ Paystack Inline Payment Plugin for Xamarin Forms and Windows
 ## NuGet
 [Xam.Plugin.PaystackInline](https://www.nuget.org/packages/Xam.Plugin.PaystackInline/)
 
+## Installation
+1. Right Click on your Visual Studio Solution and Select Manage Nuget Package for Solution
+2. Search for Xam.Plugin.PaystackInline
+3. Select your PCL/.NET Standard project, Android project and iOS project
+4. Click Install
+
 ## Platforms
 | Platform          | Version       | 
 | -------------     |:-------------:| 
