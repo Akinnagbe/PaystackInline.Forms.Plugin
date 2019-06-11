@@ -20,6 +20,11 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
         private const string CloseJavaScriptFunction = "function invokeCSharpCloseAction(){jsBridge.invokeCloseAction();}";
         private Context _context;
 
+        /// <summary>
+        /// Action to load Js after OnPageFinished Method Override
+        /// </summary>
+        internal static Action InjectJsAction = null;
+
         public PaystackWebViewRenderer(Context context) : base(context)
         {
             _context = context;
@@ -51,8 +56,11 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
 
 
                 Control.LoadDataWithBaseURL("", content, "text/html", "UTF-8", null);
-                InjectJS(CallBackJavaScriptFunction);
-                InjectJS(CloseJavaScriptFunction);
+                InjectJsAction = new Action(() =>
+                {
+                    InjectJS(CallBackJavaScriptFunction);
+                    InjectJS(CloseJavaScriptFunction);
+                });
             }
         }
 
@@ -124,6 +132,7 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
             base.OnPageFinished(view, url);
 
             view.LoadUrl(string.Format("javascript:payWithPaystack({0})", Record));
+            PaystackWebViewRenderer.InjectJsAction?.Invoke();
         }
         public override void OnPageStarted(Android.Webkit.WebView view, string url, Bitmap favicon)
         {
