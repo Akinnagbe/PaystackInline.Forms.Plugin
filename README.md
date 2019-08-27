@@ -2,9 +2,16 @@
 Paystack Inline Payment Plugin for Xamarin Forms and Windows
 
 ![ios 1](https://github.com/Akinnagbe/PaystackInline.Forms.Plugin/blob/master/PaystackInline.Forms.Plugin/ScreenShots/ios%201.PNG) ![android 1](https://github.com/Akinnagbe/PaystackInline.Forms.Plugin/blob/master/PaystackInline.Forms.Plugin/ScreenShots/droid%201.png)
+![android 4](https://github.com/Akinnagbe/PaystackInline.Forms.Plugin/blob/master/PaystackInline.Forms.Plugin/ScreenShots/droid%204.png)
 
 ## NuGet
 [Xam.Plugin.PaystackInline](https://www.nuget.org/packages/Xam.Plugin.PaystackInline/)
+
+## Installation
+1. Right Click on your Visual Studio Solution and Select Manage Nuget Package for Solution
+2. Search for Xam.Plugin.PaystackInline
+3. Select your PCL/.NET Standard project, Android project and iOS project
+4. Click Install
 
 ## Platforms
 | Platform          | Version       | 
@@ -15,7 +22,6 @@ Paystack Inline Payment Plugin for Xamarin Forms and Windows
 
 ## Android Requirements
 1. Add a reference to Mono.Android.Export, or a compiler error will result.
-2. On Android Oreo ensure that the Android manifest sets the Target Android version to Automatic. Otherwise, the iframe won't load.
 
 ## Usage
    ### XAML

@@ -19,7 +19,7 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
         private const string CallBackJavaScriptFunction = "function invokeCSharpAction(data){jsBridge.invokeCallbackAction(data);}";
         private const string CloseJavaScriptFunction = "function invokeCSharpCloseAction(){jsBridge.invokeCloseAction();}";
         private Context _context;
-
+        
         public PaystackWebViewRenderer(Context context) : base(context)
         {
             _context = context;
@@ -46,13 +46,17 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
                 var webviewElement = Element;
                 Control.AddJavascriptInterface(new JSBridge(this, _context), "jsBridge");
                 string content = LoadHtmlString();
-                Control.SetWebViewClient(new CustomWebViewClient(webviewElement.Data));
+                var InjectJsAction = new Action(() =>
+                {
+                    InjectJS(CallBackJavaScriptFunction);
+                    InjectJS(CloseJavaScriptFunction);
+                });
+                Control.SetWebViewClient(new CustomWebViewClient(webviewElement.Data, InjectJsAction));
                 // Control.LoadUrl("file:///android_asset/paystack.html");
 
 
                 Control.LoadDataWithBaseURL("", content, "text/html", "UTF-8", null);
-                InjectJS(CallBackJavaScriptFunction);
-                InjectJS(CloseJavaScriptFunction);
+                
             }
         }
 
@@ -115,10 +119,11 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
     internal class CustomWebViewClient : WebViewClient
     {
         private string Record = "";
-        string logTag = "Plugin.PaystackInline.Forms";
-        public CustomWebViewClient(string record)
+        public Action InjectJsAction = null;
+        public CustomWebViewClient(string record, Action injectJsAction)
         {
             Record = record;
+            injectJsAction = injectJsAction;
         }
         public override void OnPageFinished(Android.Webkit.WebView view, string url)
         {
