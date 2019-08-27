@@ -115,6 +115,7 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
     internal class CustomWebViewClient : WebViewClient
     {
         private string Record = "";
+        string logTag = "Plugin.PaystackInline.Forms";
         public CustomWebViewClient(string record)
         {
             Record = record;
@@ -124,16 +125,19 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
             base.OnPageFinished(view, url);
 
             view.LoadUrl(string.Format("javascript:payWithPaystack({0})", Record));
+            Android.Util.Log.Info(logTag,$"OnPageFinished: {url}");
         }
         public override void OnPageStarted(Android.Webkit.WebView view, string url, Bitmap favicon)
         {
             base.OnPageStarted(view, url, favicon);
+            Android.Util.Log.Info(logTag, $"OnPageStarted: {url}");
         }
         public override void OnReceivedError(Android.Webkit.WebView view, IWebResourceRequest request, WebResourceError error)
         {
             base.OnReceivedError(view, request, error);
+            Android.Util.Log.Error(logTag, $"OnReceivedError: {error.Description}");
         }
-
+        [Obsolete]
         public override void OnReceivedError(Android.Webkit.WebView view, [GeneratedEnum] ClientError errorCode, string description, string failingUrl)
         {
             base.OnReceivedError(view, errorCode, description, failingUrl);
@@ -142,6 +146,7 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
         public override void OnReceivedHttpError(Android.Webkit.WebView view, IWebResourceRequest request, WebResourceResponse errorResponse)
         {
             base.OnReceivedHttpError(view, request, errorResponse);
+            Android.Util.Log.Error(logTag, $"OnReceivedError: {errorResponse.ReasonPhrase}");
         }
     }
 
