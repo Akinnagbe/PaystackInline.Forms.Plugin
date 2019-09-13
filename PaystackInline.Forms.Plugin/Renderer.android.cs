@@ -14,12 +14,12 @@ using Xamarin.Forms.Platform.Android;
 namespace Plugin.PaystackInline.Forms.Plugin.Droid
 {
     [Preserve(AllMembers = true)]
-    public class PaystackWebViewRenderer : ViewRenderer<PaystackWebView, Android.Webkit.WebView>
+    public class PaystackWebViewRenderer : ViewRenderer<PaystackWebView, Android.Webkit.WebViewClient>
     {
         private const string CallBackJavaScriptFunction = "function invokeCSharpAction(data){jsBridge.invokeCallbackAction(data);}";
         private const string CloseJavaScriptFunction = "function invokeCSharpCloseAction(){jsBridge.invokeCloseAction();}";
         private Context _context;
-        
+
         public PaystackWebViewRenderer(Context context) : base(context)
         {
             _context = context;
@@ -31,6 +31,7 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
             {
                 var webview = new Android.Webkit.WebView(_context);
                 webview.Settings.JavaScriptEnabled = true;
+                webview.Settings.DomStorageEnabled = true;
                 SetNativeControl(webview);
             }
             if (e.OldElement != null)
@@ -56,7 +57,7 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
 
 
                 Control.LoadDataWithBaseURL("", content, "text/html", "UTF-8", null);
-                
+
             }
         }
 
@@ -71,15 +72,18 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
         internal string LoadHtmlString()
         {
             var html = new StringBuilder();
+          
             html.Append("<html>");
             html.AppendLine();
-            html.Append("<body>");
+            string bodyStartTag = string.Format("<body style=\"height: {0}px \">", Element.WebViewHeight);
+            html.Append(bodyStartTag);
             html.AppendLine();
             html.Append("<form>");
             html.AppendLine();
             html.Append("<script src=\"http://code.jquery.com/jquery-2.1.4.min.js\"></script>");
             html.AppendLine();
             html.Append("<script src=\"https://js.paystack.co/v1/inline.js\"></script>");
+            html.AppendLine();
             html.AppendLine();
             html.Append("</form>");
             html.AppendLine();
@@ -116,10 +120,11 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
         }
     }
 
-    internal class CustomWebViewClient : WebViewClient
+    internal class CustomWebViewClient :  WebViewClient
     {
         private string Record = "";
         public Action InjectJsAction = null;
+        private const string logTag = "Plugin.PaystackInline.Forms";
         public CustomWebViewClient(string record, Action injectJsAction)
         {
             Record = record;
@@ -130,7 +135,7 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
             base.OnPageFinished(view, url);
 
             view.LoadUrl(string.Format("javascript:payWithPaystack({0})", Record));
-            Android.Util.Log.Info(logTag,$"OnPageFinished: {url}");
+            Android.Util.Log.Info(logTag, $"OnPageFinished: {url}");
         }
         public override void OnPageStarted(Android.Webkit.WebView view, string url, Bitmap favicon)
         {
@@ -140,7 +145,7 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
         public override void OnReceivedError(Android.Webkit.WebView view, IWebResourceRequest request, WebResourceError error)
         {
             base.OnReceivedError(view, request, error);
-            Android.Util.Log.Error(logTag, $"OnReceivedError: {error.Description}");
+            Android.Util.Log.Error(logTag, $"OnReceivedError: {error.Description}, Url:{request.Url.Path}");
         }
         [Obsolete]
         public override void OnReceivedError(Android.Webkit.WebView view, [GeneratedEnum] ClientError errorCode, string description, string failingUrl)
@@ -151,7 +156,7 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
         public override void OnReceivedHttpError(Android.Webkit.WebView view, IWebResourceRequest request, WebResourceResponse errorResponse)
         {
             base.OnReceivedHttpError(view, request, errorResponse);
-            Android.Util.Log.Error(logTag, $"OnReceivedError: {errorResponse.ReasonPhrase}");
+            Android.Util.Log.Error(logTag, $"OnReceivedError: {errorResponse.ReasonPhrase}, Url:{request.Url.EncodedSchemeSpecificPart}");
         }
     }
 

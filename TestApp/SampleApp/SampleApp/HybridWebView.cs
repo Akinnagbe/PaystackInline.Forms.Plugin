@@ -49,6 +49,12 @@ namespace SampleApp
             set { SetValue(DataProperty, value); }
         }
 
+        public static readonly BindableProperty WebViewHeightProperty = BindableProperty.Create(nameof(WebViewHeight), typeof(double), typeof(PaystackWebView), defaultValue: 1000D, defaultBindingMode: BindingMode.TwoWay);
+        public double WebViewHeight
+        {
+            get { return (double)GetValue(WebViewHeightProperty); }
+            set { SetValue(WebViewHeightProperty, value); }
+        }
 
         /// <summary>
         /// registers an Action with the control. The registered action will be invoked from JavaScript contained in the HTML file referenced through the Uri property.
