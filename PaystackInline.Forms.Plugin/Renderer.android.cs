@@ -14,7 +14,7 @@ using Xamarin.Forms.Platform.Android;
 namespace Plugin.PaystackInline.Forms.Plugin.Droid
 {
     [Preserve(AllMembers = true)]
-    public class PaystackWebViewRenderer : ViewRenderer<PaystackWebView, Android.Webkit.WebViewClient>
+    public class PaystackWebViewRenderer : ViewRenderer<PaystackWebView, Android.Webkit.WebView>
     {
         private const string CallBackJavaScriptFunction = "function invokeCSharpAction(data){jsBridge.invokeCallbackAction(data);}";
         private const string CloseJavaScriptFunction = "function invokeCSharpCloseAction(){jsBridge.invokeCloseAction();}";
