@@ -19,7 +19,7 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
         private const string CallBackJavaScriptFunction = "function invokeCSharpAction(data){jsBridge.invokeCallbackAction(data);}";
         private const string CloseJavaScriptFunction = "function invokeCSharpCloseAction(){jsBridge.invokeCloseAction();}";
         private Context _context;
-        
+
         public PaystackWebViewRenderer(Context context) : base(context)
         {
             _context = context;
@@ -31,6 +31,7 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
             {
                 var webview = new Android.Webkit.WebView(_context);
                 webview.Settings.JavaScriptEnabled = true;
+                webview.Settings.DomStorageEnabled = true;
                 SetNativeControl(webview);
             }
             if (e.OldElement != null)
@@ -46,17 +47,11 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
                 var webviewElement = Element;
                 Control.AddJavascriptInterface(new JSBridge(this, _context), "jsBridge");
                 string content = LoadHtmlString();
-                var InjectJsAction = new Action(() =>
-                {
-                    InjectJS(CallBackJavaScriptFunction);
-                    InjectJS(CloseJavaScriptFunction);
-                });
-                Control.SetWebViewClient(new CustomWebViewClient(webviewElement.Data, InjectJsAction));
-                // Control.LoadUrl("file:///android_asset/paystack.html");
-
+                Control.SetWebViewClient(new CustomWebViewClient(webviewElement.Data));
 
                 Control.LoadDataWithBaseURL("", content, "text/html", "UTF-8", null);
-                
+                InjectJS(CallBackJavaScriptFunction);
+                InjectJS(CloseJavaScriptFunction);
             }
         }
 
@@ -71,15 +66,18 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
         internal string LoadHtmlString()
         {
             var html = new StringBuilder();
+          
             html.Append("<html>");
             html.AppendLine();
-            html.Append("<body>");
+            string bodyStartTag = string.Format("<body style=\"height: {0}px \">", Element.WebViewHeight);
+            html.Append(bodyStartTag);
             html.AppendLine();
             html.Append("<form>");
             html.AppendLine();
             html.Append("<script src=\"http://code.jquery.com/jquery-2.1.4.min.js\"></script>");
             html.AppendLine();
             html.Append("<script src=\"https://js.paystack.co/v1/inline.js\"></script>");
+            html.AppendLine();
             html.AppendLine();
             html.Append("</form>");
             html.AppendLine();
@@ -119,28 +117,30 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
     internal class CustomWebViewClient : WebViewClient
     {
         private string Record = "";
-        public Action InjectJsAction = null;
-        public CustomWebViewClient(string record, Action injectJsAction)
+        private const string logTag = "Plugin.PaystackInline.Forms";
+        public CustomWebViewClient(string record)
         {
             Record = record;
-            injectJsAction = injectJsAction;
+
         }
         public override void OnPageFinished(Android.Webkit.WebView view, string url)
         {
             base.OnPageFinished(view, url);
 
             view.LoadUrl(string.Format("javascript:payWithPaystack({0})", Record));
-            InjectJsAction?.Invoke();
+            Android.Util.Log.Info(logTag, $"OnPageFinished: {url}");
         }
         public override void OnPageStarted(Android.Webkit.WebView view, string url, Bitmap favicon)
         {
             base.OnPageStarted(view, url, favicon);
+            Android.Util.Log.Info(logTag, $"OnPageStarted: {url}");
         }
         public override void OnReceivedError(Android.Webkit.WebView view, IWebResourceRequest request, WebResourceError error)
         {
             base.OnReceivedError(view, request, error);
+            Android.Util.Log.Error(logTag, $"OnReceivedError: {error.Description}, Url:{request.Url.Path}");
         }
-
+        [Obsolete]
         public override void OnReceivedError(Android.Webkit.WebView view, [GeneratedEnum] ClientError errorCode, string description, string failingUrl)
         {
             base.OnReceivedError(view, errorCode, description, failingUrl);
@@ -149,13 +149,14 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
         public override void OnReceivedHttpError(Android.Webkit.WebView view, IWebResourceRequest request, WebResourceResponse errorResponse)
         {
             base.OnReceivedHttpError(view, request, errorResponse);
+            Android.Util.Log.Error(logTag, $"OnReceivedError: {errorResponse.ReasonPhrase}, Url:{request.Url.EncodedSchemeSpecificPart}");
         }
     }
 
     internal class JSBridge : Java.Lang.Object
     {
         private readonly WeakReference<PaystackWebViewRenderer> hybridWebViewRenderer;
-        private Context _context;
+        private readonly Context _context;
         public JSBridge(PaystackWebViewRenderer hybridRenderer, Context context)
         {
             hybridWebViewRenderer = new WeakReference<PaystackWebViewRenderer>(hybridRenderer);

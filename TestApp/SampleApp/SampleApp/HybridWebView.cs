@@ -49,6 +49,7 @@ namespace SampleApp
             set { SetValue(DataProperty, value); }
         }
 
+       
 
         /// <summary>
         /// registers an Action with the control. The registered action will be invoked from JavaScript contained in the HTML file referenced through the Uri property.
