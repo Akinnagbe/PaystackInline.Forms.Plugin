@@ -10,8 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xam.Plugin.PaystackInline" Version="1.0.1-apha06" />
-    <PackageReference Include="Xamarin.Forms" Version="4.2.0.709249" />  
+    <PackageReference Include="Xam.Plugin.PaystackInline" Version="1.0.1-apha10" />
+    <PackageReference Include="Xamarin.Forms" Version="4.2.0.815419" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.1.0" />
   </ItemGroup>
 

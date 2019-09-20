@@ -47,17 +47,11 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
                 var webviewElement = Element;
                 Control.AddJavascriptInterface(new JSBridge(this, _context), "jsBridge");
                 string content = LoadHtmlString();
-                var InjectJsAction = new Action(() =>
-                {
-                    InjectJS(CallBackJavaScriptFunction);
-                    InjectJS(CloseJavaScriptFunction);
-                });
-                Control.SetWebViewClient(new CustomWebViewClient(webviewElement.Data, InjectJsAction));
-                // Control.LoadUrl("file:///android_asset/paystack.html");
-
+                Control.SetWebViewClient(new CustomWebViewClient(webviewElement.Data));
 
                 Control.LoadDataWithBaseURL("", content, "text/html", "UTF-8", null);
-
+                InjectJS(CallBackJavaScriptFunction);
+                InjectJS(CloseJavaScriptFunction);
             }
         }
 
@@ -120,15 +114,14 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
         }
     }
 
-    internal class CustomWebViewClient :  WebViewClient
+    internal class CustomWebViewClient : WebViewClient
     {
         private string Record = "";
-        public Action InjectJsAction = null;
         private const string logTag = "Plugin.PaystackInline.Forms";
-        public CustomWebViewClient(string record, Action injectJsAction)
+        public CustomWebViewClient(string record)
         {
             Record = record;
-            injectJsAction = injectJsAction;
+
         }
         public override void OnPageFinished(Android.Webkit.WebView view, string url)
         {
@@ -163,7 +156,7 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
     internal class JSBridge : Java.Lang.Object
     {
         private readonly WeakReference<PaystackWebViewRenderer> hybridWebViewRenderer;
-        private Context _context;
+        private readonly Context _context;
         public JSBridge(PaystackWebViewRenderer hybridRenderer, Context context)
         {
             hybridWebViewRenderer = new WeakReference<PaystackWebViewRenderer>(hybridRenderer);

@@ -23,7 +23,7 @@ namespace SampleApp.Views
         void LoadPlugin()
         {
             var product = new PaystackModel();
-            product.key = "pk_test_6acfe19632a2b3005e9bfe05648311f71d7c87b0";
+            product.key = "";
             product.email = "me@you.com";
             product.amount = 490000m;
             //  product.subaccount = "ACCT_jiOpeieli";
