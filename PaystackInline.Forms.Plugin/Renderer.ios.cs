@@ -78,7 +78,8 @@ namespace Plugin.PaystackInline.Forms.Plugin.iOS
             var html = new StringBuilder();
             html.Append("<html>");
             html.AppendLine();
-            html.Append("<body>");
+            string bodyStartTag = string.Format("<body style=\"height: {0}px \">", Element.WebViewHeight);
+            html.Append(bodyStartTag);
             html.AppendLine();
             html.Append("<form>");
             html.AppendLine();
