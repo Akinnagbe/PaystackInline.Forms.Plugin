@@ -22,7 +22,6 @@ Paystack Inline Payment Plugin for Xamarin Forms and Windows
 
 ## Android Requirements
 1. Add a reference to Mono.Android.Export, or a compiler error will result.
-2. On Android Oreo ensure that the Android manifest sets the Target Android version to Automatic. Otherwise, the iframe won't load.
 
 ## Usage
    ### XAML
