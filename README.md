@@ -96,7 +96,7 @@ Paystack Inline Payment Plugin for Xamarin Forms and Windows
 
         private void hybridWebView_PaymentSuccessful(object sender, string e)
         {
-            DisplayAlert("Alert", "Hello " + e, "OK");
+            DisplayAlert("Alert", "Payment Reference: " + e, "OK");
         }
 
 ```
