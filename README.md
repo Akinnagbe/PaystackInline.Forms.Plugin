@@ -33,7 +33,13 @@ Paystack Inline Payment Plugin for Xamarin Forms and Windows
              x:Class="SampleApp.MainPage">
 
     <StackLayout>
-        <local:PaystackWebView x:Name="hybridWebView"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"></local:PaystackWebView>
+        <local:PaystackWebView x:Name="hybridWebView"  
+        HorizontalOptions="FillAndExpand" 
+        VerticalOptions="FillAndExpand"
+        PaymentClosed="HybridWebView_PaymentClosed"
+        PaymentSuccessful="hybridWebView_PaymentSuccessful"
+         WebViewHeight="1000">
+        </local:PaystackWebView>
 
     </StackLayout>
 
@@ -77,5 +83,20 @@ Paystack Inline Payment Plugin for Xamarin Forms and Windows
 
             hybridWebView.RegisterCloseAction(() => DisplayAlert("WebView Closed", "Close button clicked", "ok"));
             hybridWebView.RegisterCallBackAction(data => DisplayAlert("Alert", "Hello " + data, "OK"));
+
+```
+#### add the following event listners
+```
+ private void HybridWebView_PaymentClosed(object sender, string e)
+        {
+            DisplayAlert("WebView Closed", "Close button clicked event", "ok");
+        }
+
+       
+
+        private void hybridWebView_PaymentSuccessful(object sender, string e)
+        {
+            DisplayAlert("Alert", "Hello " + e, "OK");
+        }
 
 ```
