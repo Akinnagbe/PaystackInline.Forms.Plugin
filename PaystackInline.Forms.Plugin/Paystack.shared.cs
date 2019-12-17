@@ -63,18 +63,24 @@ namespace Plugin.PaystackInline.Forms.Plugin
         /// <param name="data"></param>
         public void InvokeCallbackAction(string data)
         {
-            if (action == null || data == null)
+            if (action != null)
             {
-                return;
+                action.Invoke(data);
             }
-            action.Invoke(data);
+
+            PaymentSuccessful?.Invoke(this, data);
         }
         public void InvokeCloseAction()
         {
-            if (closeAction == null)
-                return;
-            closeAction.Invoke();
+            if (closeAction != null)
+            {
+                closeAction.Invoke();
+            }
+            PaymentClosed?.Invoke(this, "");
         }
+
+        public event EventHandler<string> PaymentClosed;
+        public event EventHandler<string> PaymentSuccessful;
     }
 
 

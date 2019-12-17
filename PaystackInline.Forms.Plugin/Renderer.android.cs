@@ -16,8 +16,7 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
     [Preserve(AllMembers = true)]
     public class PaystackWebViewRenderer : ViewRenderer<PaystackWebView, Android.Webkit.WebView>
     {
-        private const string CallBackJavaScriptFunction = "function invokeCSharpAction(data){jsBridge.invokeCallbackAction(data);}";
-        private const string CloseJavaScriptFunction = "function invokeCSharpCloseAction(){jsBridge.invokeCloseAction();}";
+       
         private Context _context;
 
         public PaystackWebViewRenderer(Context context) : base(context)
@@ -45,13 +44,12 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
             {
                 //subscribe to Events
                 var webviewElement = Element;
-                Control.AddJavascriptInterface(new JSBridge(this, _context), "jsBridge");
+                Control.AddJavascriptInterface(new JSBridge(this), "jsBridge");
                 string content = LoadHtmlString();
                 Control.SetWebViewClient(new CustomWebViewClient(webviewElement.Data));
 
                 Control.LoadDataWithBaseURL("", content, "text/html", "UTF-8", null);
-                InjectJS(CallBackJavaScriptFunction);
-                InjectJS(CloseJavaScriptFunction);
+               
             }
         }
 
@@ -118,6 +116,8 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
     {
         private string Record = "";
         private const string logTag = "Plugin.PaystackInline.Forms";
+        private const string CallBackJavaScriptFunction = "function invokeCSharpAction(data){jsBridge.invokeCallbackAction(data);}";
+        private const string CloseJavaScriptFunction = "function invokeCSharpCloseAction(){jsBridge.invokeCloseAction();}";
         public CustomWebViewClient(string record)
         {
             Record = record;
@@ -127,7 +127,10 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
         {
             base.OnPageFinished(view, url);
 
+            view.EvaluateJavascript(CloseJavaScriptFunction, null);
+            view.EvaluateJavascript(CallBackJavaScriptFunction, null);
             view.LoadUrl(string.Format("javascript:payWithPaystack({0})", Record));
+
             Android.Util.Log.Info(logTag, $"OnPageFinished: {url}");
         }
         public override void OnPageStarted(Android.Webkit.WebView view, string url, Bitmap favicon)
@@ -156,11 +159,11 @@ namespace Plugin.PaystackInline.Forms.Plugin.Droid
     internal class JSBridge : Java.Lang.Object
     {
         private readonly WeakReference<PaystackWebViewRenderer> hybridWebViewRenderer;
-        private readonly Context _context;
-        public JSBridge(PaystackWebViewRenderer hybridRenderer, Context context)
+       
+        public JSBridge(PaystackWebViewRenderer hybridRenderer)
         {
             hybridWebViewRenderer = new WeakReference<PaystackWebViewRenderer>(hybridRenderer);
-            _context = context;
+           
         }
 
         [JavascriptInterface]
