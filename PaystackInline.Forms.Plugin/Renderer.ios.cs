@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 
 using Foundation;
 using Plugin.PaystackInline.Forms.Plugin;
 using Plugin.PaystackInline.Forms.Plugin.iOS;
-using UIKit;
 using WebKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
@@ -15,7 +10,7 @@ using Xamarin.Forms.Platform.iOS;
 [assembly: ExportRenderer(typeof(PaystackWebView), typeof(PaystackWebViewRenderer))]
 namespace Plugin.PaystackInline.Forms.Plugin.iOS
 {
-   
+
     public class PaystackWebViewRenderer : ViewRenderer<PaystackWebView, WKWebView>, IWKScriptMessageHandler
     {
         const string PaymentJavaScriptFunction = "function invokeCSharpAction(data){window.webkit.messageHandlers.invokePayAction.postMessage(data);}";
@@ -76,10 +71,12 @@ namespace Plugin.PaystackInline.Forms.Plugin.iOS
         internal string LoadHtmlString()
         {
             var html = new StringBuilder();
+            html.Append("<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1' />");
+            html.AppendLine();
             html.Append("<html>");
             html.AppendLine();
-            string bodyStartTag = string.Format("<body style=\"height: {0}px \">", Element.WebViewHeight);
-            html.Append(bodyStartTag);
+            //string bodyStartTag = string.Format("<body style=\"height: {0}px \">", Element.WebViewHeight);
+            html.Append("<body>");
             html.AppendLine();
             html.Append("<form>");
             html.AppendLine();

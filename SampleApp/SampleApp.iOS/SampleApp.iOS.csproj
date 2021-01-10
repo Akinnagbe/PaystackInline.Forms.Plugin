@@ -129,17 +129,18 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xam.Plugin.PaystackInline">
-      <Version>1.0.1-apha10</Version>
-    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="4.2.0.815419" />
     <PackageReference Include="Xamarin.Essentials" Version="1.1.0" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\SampleApp\SampleApp.csproj">
-      <Project>{AFC17FEB-EB40-4552-B3C1-F766B41BB459}</Project>
+      <Project>{B730023F-93E9-4536-B996-0AB7B934CF71}</Project>
       <Name>SampleApp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PaystackInline.Forms.Plugin\PaystackInline.Forms.Plugin.csproj">
+      <Project>{4FFB6579-5CB1-4814-BCBF-2B2A3971F12C}</Project>
+      <Name>PaystackInline.Forms.Plugin</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
